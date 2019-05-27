@@ -15,6 +15,8 @@ public class GameManager : MonoBehaviour
     public GameObject background2;                  // Background sprite that oscillates left to right 
     public GameObject background3;                  // Background sprite that oscillates left to right 
 
+    private float delay = 1.0f; // Delay time
+
     public float gameWidth { get; private set; }    // Width of the game view
     public float gameHeight { get; private set; }   // Height of the game view
 
@@ -637,14 +639,23 @@ public class GameManager : MonoBehaviour
 
                     frames.Remove(frameToDelete);
                     Destroy(frameToDelete);
-                    
+
                     // Play a particle system for success or failure. The particle system to be
                     // instantiated is a pulic property set in the Inspector.
-                    //
+                    // If particle system is instantiated, there will be a 1 second delay to remove particle system game object
                     ParticleSystem ps = Instantiate(successParticles);
+
+                    ps.GetComponent<ParticleSystem>().Play();
                     ps.transform.localScale = new Vector3(10, 10, 1);
                     Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
                     ps.transform.position = mousePos;
+                    Debug.Log(ps + "is playing!");
+
+                    if (ps.isPlaying)
+                    {
+                        Destroy(ps.gameObject, delay);
+                        Debug.Log(ps + "is Gone!");
+                    }
 
                     // Play a success sound
                     //
@@ -659,6 +670,11 @@ public class GameManager : MonoBehaviour
                     // Play the fail particle system
 
                     ParticleSystem ps = Instantiate(failParticles);
+                    if (ps.isPlaying)
+                    {
+                        Destroy(ps.gameObject, delay);
+                        Debug.Log(ps + "is Gone!");
+                    }
                     ps.transform.localScale = new Vector3(15, 15, 1);
                     Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
                     ps.transform.position = mousePos;

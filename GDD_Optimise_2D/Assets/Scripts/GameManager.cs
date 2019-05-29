@@ -558,6 +558,7 @@ public class GameManager : MonoBehaviour
 
     private void Update()
     {
+
         // Make sure all the frames have been created before the game can be played
         //
         if(initialised)
